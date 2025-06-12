@@ -12,7 +12,12 @@ class Task(db.Model):
     creation_time = db.Column(db.DateTime, default=datetime.utcnow)
     due_date = db.Column(db.DateTime, nullable=True)  # optional for users
 
-    # need a to_dict() method to convert rows to into Python dicts
+    def __init__(self, title, description=None, status=False, due_date=None):
+        self.title = title
+        self.description = description
+        self.status = status
+        self.due_date = due_date
+
     def to_dict(self):
         return {"id": self.id, "title": self.title, "description": self.description, "status": self.status,
                 "creation_time": self.creation_time.isoformat() if self.creation_time else None,
