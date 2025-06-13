@@ -64,4 +64,29 @@ def delete_task(task_id):
 
 @tasks_bp.route("/tasks/filter", methods=["GET"])
 def filtering_task():
-    pass
+    query = Task.query
+    status = request.args.get("status")
+    title = request.args.get("title")
+    due_date = request.args.get("due_date")
+    creation_time = request.args.get("creation_time")
+
+    if status is not None:
+        status = status.lower() == "true"
+        query = query.filter(Task.status == status)
+
+    if title is not None:
+        query = query.filter(Task.title == title)
+
+    if due_date is not None:
+        due_date = datetime.fromisoformat(due_date)
+        query = query.filter(Task.due_date == due_date)
+
+    if creation_time is not None:
+        creation_time = datetime.fromisoformat(creation_time)
+        query = query.filter(Task.creation_time == creation_time)
+
+    if not any(param is not None for param in [status, title, due_date, creation_time]):
+        return jsonify({"error": "No filter provided"})
+
+    results = query.all()
+    return jsonify([task.to_dict() for task in results])
