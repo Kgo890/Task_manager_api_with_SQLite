@@ -1,20 +1,20 @@
 # API routes/endpoints
 from flask import jsonify, Blueprint, request
-from models import Task
+from backend.models import Task
 from datetime import datetime
-from extensions import db
+from backend.extensions import db
 
 # Blueprint object
 tasks_bp = Blueprint('tasks', __name__)
 
 
-@tasks_bp.route("/tasks", methods=["GET"])
+@tasks_bp.route("/tasks", methods=['GET'])
 def get_multiple_task():
     tasks = Task.query.all()
     return jsonify([task.to_dict() for task in tasks])
 
 
-@tasks_bp.route("/tasks", methods=["POST"])
+@tasks_bp.route("/tasks", methods=['POST'])
 def create_tasks():
     data = request.get_json()
     title = data.get("title")
@@ -32,7 +32,7 @@ def create_tasks():
     return jsonify(task.to_dict())
 
 
-@tasks_bp.route("/tasks/<int:task_id>", methods=["PUT"])
+@tasks_bp.route("/tasks/<int:task_id>", methods=['PUT'])
 def update_task(task_id):
     data = request.get_json()
     task = Task.query.get(task_id)
@@ -51,7 +51,7 @@ def update_task(task_id):
     return jsonify(task.to_dict())
 
 
-@tasks_bp.route("/tasks/<int:task_id>", methods=["DELETE"])
+@tasks_bp.route("/tasks/<int:task_id>", methods=['DELETE'])
 def delete_task(task_id):
     task = Task.query.get(task_id)
     if task is None:
@@ -62,7 +62,7 @@ def delete_task(task_id):
     return jsonify({"message": "Task deleted successfully"})
 
 
-@tasks_bp.route("/tasks/filter", methods=["GET"])
+@tasks_bp.route("/tasks/filter", methods=['GET'])
 def filtering_task():
     query = Task.query
     status = request.args.get("status")

@@ -1,10 +1,11 @@
 from flask import Flask
 from config import db_url
-from extensions import db
+from backend.extensions import db
 from routes import tasks_bp
-
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = db_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 

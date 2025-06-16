@@ -1,5 +1,5 @@
 # database models
-from extensions import db
+from backend.extensions import db
 from datetime import datetime
 
 
