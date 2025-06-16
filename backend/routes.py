@@ -40,15 +40,23 @@ def update_task(task_id):
     description = data.get("description")
     status = data.get("status", False)
     due_date = data.get("due_date")
-    if task is None:
-        return jsonify({"error": "Task not found"})
+
+    if due_date:
+        due_date = datetime.fromisoformat(due_date)
     else:
-        task.title = title
-        task.description = description
-        task.status = status
-        task.due_date = due_date
-        db.session.commit()
+        due_date = None
+
+    if task is None:
+        return jsonify({"error": "Task not found"}), 404
+
+    task.title = title
+    task.description = description
+    task.status = status
+    task.due_date = due_date
+
+    db.session.commit()
     return jsonify(task.to_dict())
+
 
 
 @tasks_bp.route("/tasks/<int:task_id>", methods=['DELETE'])
